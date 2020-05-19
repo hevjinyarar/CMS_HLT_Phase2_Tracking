@@ -66,7 +66,6 @@ process.options = cms.untracked.PSet()
     wantSummary = cms.untracked.bool(False)
 """
 
-
 # Production Info
 process.configurationMetadata = cms.untracked.PSet(
     annotation = cms.untracked.string('step3 nevts:10'),
@@ -118,10 +117,11 @@ process.RECOSIMoutput_step = cms.EndPath(process.RECOSIMoutput)
 """
 
 process.load('raw2digi_step_cff')
-process.load("MC_Tracking_v2_cff")
-process.load('MC_prevalidation_v2_cff') 
-process.load('MC_Dqmoffline_v2_cff')
+process.load("MC_Tracking_v6_cff")
+process.load('MC_prevalidation_v6_cff') 
+process.load('MC_Dqmoffline_cff')
 process.DQMoutput_step = cms.EndPath(process.DQMoutput)
+
 
 # load the DQMStore and DQMRootOutputModule
 # enable multithreading
@@ -132,7 +132,7 @@ process.options.numberOfStreams = cms.untracked.uint32(8)
 process.options.numberOfThreads = cms.untracked.uint32(8)
 
 # Schedule definition
-process.schedule = cms.Schedule(process.raw2digi_step, process.MC_Tracking_v2, process.MC_Vertexing_v2, process.MC_prevalidation_v2, process.MC_validation_v2, process.MC_Dqmoffline_v2, process.DQMoutput_step)
+process.schedule = cms.Schedule(process.raw2digi_step, process.MC_Tracking_v6, process.MC_Vertexing_v6, process.MC_prevalidation_v6, process.MC_validation_v6, process.MC_Dqmoffline, process.DQMoutput_step  )
 
 from PhysicsTools.PatAlgos.tools.helpers import associatePatAlgosToolsTask
 associatePatAlgosToolsTask(process)
