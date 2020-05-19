@@ -1,5 +1,17 @@
 # CMS_HLT_Phase2_Tracking
 
+### CMSSW_11_1_0_pre6
+
+Release generated script with new paths plugged in
+############
+step3_RAW2DIGI_RECO_VALIDATION_DQM.py 
+
+needs:
+- raw2digi_step_cff.py
+- MC_Tracking_v2_cff.py / v4 / v6 / v6_1 / v7_1
+- MC_prevalidation_cff.py / MC_prevalidation_v6_cff.py
+- MC_Dqmoffline_cff.py
+
 ### CMSSW_11_1_0_pre3
 
 Release generated script with new paths plugged in
@@ -7,7 +19,6 @@ Release generated script with new paths plugged in
 step3_RAW2DIGI_RECO_VALIDATION_DQM.py 
 
 needs:
-- step2.root
 - raw2digi_step_cff.py
 - MC_Tracking_v2_cff.py / MC_Tracking_v4_cff.py / MC_Tracking_v6_cff.py
 - MC_prevalidation_cff.py / MC_prevalidation_v6_cff.py
@@ -22,7 +33,6 @@ Release generated script with new paths plugged in
 step3_RAW2DIGI_RECO_VALIDATION_DQM.py 
 
 needs:
-- step2.root
 - extras_cmssw_11_0_cff.py (extra modules needed)
 - raw2digi_step_cff.py
 - MC_Tracking_v0_cmssw_11_0_cff.py / MC_Tracking_v1_cmssw_11_0_cff.py / MC_Tracking_v2_cmssw_11_0_cff.py
