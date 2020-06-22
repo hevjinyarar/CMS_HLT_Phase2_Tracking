@@ -90,7 +90,7 @@ def customize_TRK_v6(process):
 	    ZSeparation = cms.double( 0.05 )
 	)
 
-	process.TrimmedPixelVertices = cms.EDProducer( "PixelVertexCollectionTrimmer",
+	process.trimmedPixelVertices = cms.EDProducer( "PixelVertexCollectionTrimmer",
 	    src = cms.InputTag( "pixelVertices" ),
 	    fractionSumPt2 = cms.double( 0.3 ),
 	    minSumPt2 = cms.double( 0.0 ),
@@ -349,7 +349,7 @@ def customize_TRK_v6(process):
 
 	process.pixelVerticesSequence = cms.Sequence( # pixelVertices
 	    process.pixelVertices + 
-	    process.TrimmedPixelVertices 
+	    process.trimmedPixelVertices 
 	)
 
 
