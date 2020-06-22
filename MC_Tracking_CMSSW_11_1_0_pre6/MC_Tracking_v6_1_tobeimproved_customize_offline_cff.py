@@ -6,8 +6,7 @@ from Configuration.StandardSequences.Reconstruction_cff import *
 
 
 ######### 
-# "online": has hltPhase2 prefix either because it is introduced or the module with the same name offline is of another kind,  
-# e.g. generalTracks (online:TrackListMerger, offline: DuplicateListMerger)
+# if module has hltPhase2 prefix because it is introduced 
 
 ############## pixelTracks/Vertices
 
@@ -87,7 +86,7 @@ def customize_TRK_v6_1(process):
 	process.pixelTracks.mightGet = cms.untracked.vstring("")
 
 	# this has to be re-defined, offline is PrimaryVertexProducer
-	process.hltPhase2PixelVertices = cms.EDProducer( "PixelVertexProducer",
+	process.pixelVertices = cms.EDProducer( "PixelVertexProducer",
 	    WtAverage = cms.bool( True ),
 	    Method2 = cms.bool( True ),
 	    beamSpot = cms.InputTag( "offlineBeamSpot" ),
@@ -102,8 +101,8 @@ def customize_TRK_v6_1(process):
 	    ZSeparation = cms.double( 0.05 )
 	)
 
-	process.hltPhase2TrimmedPixelVertices = cms.EDProducer( "PixelVertexCollectionTrimmer",
-	    src = cms.InputTag( "hltPhase2PixelVertices" ),
+	process.trimmedPixelVertices = cms.EDProducer( "PixelVertexCollectionTrimmer",
+	    src = cms.InputTag( "pixelVertices" ),
 	    fractionSumPt2 = cms.double( 0.3 ),
 	    minSumPt2 = cms.double( 0.0 ),
 	    PVcomparer = cms.PSet(  refToPSet_ = cms.string( "hltPhase2PSetPvClusterComparerForIT" ) ),
@@ -132,7 +131,7 @@ def customize_TRK_v6_1(process):
 	    )
 	
 	# online beacuse offline it is a DuplicateListMerger
-	process.hltPhase2GeneralTracks = cms.EDProducer("TrackListMerger",  
+	process.generalTracks = cms.EDProducer("TrackListMerger",  
 	    Epsilon = cms.double(-0.001),
 	    FoundHitBonus = cms.double(5.0),
 	    LostHitPenalty = cms.double(5.0),
@@ -182,7 +181,7 @@ def customize_TRK_v6_1(process):
 	process.hltPhase2HighPtTripletStepTrackCutClassifier = cms.EDProducer( "TrackCutClassifier",
 	    src = cms.InputTag( "highPtTripletStepTracks" ),
 	    beamspot = cms.InputTag( "offlineBeamSpot" ),
-	    vertices = cms.InputTag( "hltPhase2PixelVertices" ), # pixelVertices previous firstStepPrimaryVertices" ),
+	    vertices = cms.InputTag( "pixelVertices" ), # pixelVertices previous firstStepPrimaryVertices" ),
 	    qualityCuts = cms.vdouble( -0.7, 0.1, 0.7 ),
 	    mva = cms.PSet( 
 	      minPixelHits = cms.vint32( 0, 0, 3 ), ##
@@ -258,15 +257,15 @@ def customize_TRK_v6_1(process):
 	########################  initial step
 
 	#hltIter0PFLowPixelSeedsFromPixelTracks 
-	process.hltPhase2InitialStepSeeds = cms.EDProducer( "SeedGeneratorFromProtoTracksEDProducer",
+	process.initialStepSeeds = cms.EDProducer( "SeedGeneratorFromProtoTracksEDProducer",
 	    useEventsWithNoVertex = cms.bool( True ),
 	    originHalfLength = cms.double(10), #10 1  previous 0.3 ),
 	    useProtoTrackKinematics = cms.bool( False ),
 	    usePV = cms.bool( False ),  
 	    SeedCreatorPSet = cms.PSet(  refToPSet_ = cms.string( "hltPhase2SeedFromProtoTracks" ) ),
-	    InputVertexCollection = cms.InputTag( "hltPhase2TrimmedPixelVertices"),
+	    InputVertexCollection = cms.InputTag( "trimmedPixelVertices"),
 	    TTRHBuilder = cms.string( "WithTrackAngle"), #hltESPTTRHBuilderPixelOnly" ),
-	    InputCollection = cms.InputTag( "hltPhase2PixelTracks" ),
+	    InputCollection = cms.InputTag( "pixelTracks" ),
 	    originRadius = cms.double( 5 ) # 5 #0.5  previous 0.1
 	)
 
@@ -274,7 +273,7 @@ def customize_TRK_v6_1(process):
 	process.hltPhase2InitialStepTrackCutClassifier = cms.EDProducer( "TrackCutClassifier",
 	    src = cms.InputTag( "initialStepTracks" ),
 	    beamspot = cms.InputTag( "offlineBeamSpot" ),
-	    vertices = cms.InputTag( "hltPhase2PixelVertices" ), # pixelVertices previous firstStepPrimaryVertices" ),
+	    vertices = cms.InputTag( "pixelVertices" ), # pixelVertices previous firstStepPrimaryVertices" ),
 	    qualityCuts = cms.vdouble( -0.7, 0.1, 0.7 ),
 	    mva = cms.PSet( 
 		minPixelHits = cms.vint32(0,0,3), ######
@@ -370,9 +369,9 @@ def customize_TRK_v6_1(process):
 	    process.pixelTracks
 	)
 
-	process.hltPhase2PixelVerticesSequence = cms.Sequence( # pixelVertices
-	    process.hltPhase2PixelVertices + 
-	    process.hltPhase2TrimmedPixelVertices 
+	process.pixelVerticesSequence = cms.Sequence( # pixelVertices
+	    process.pixelVertices + 
+	    process.trimmedPixelVertices 
 	)
 
 
@@ -390,7 +389,7 @@ def customize_TRK_v6_1(process):
 	    #process.initialStepTrackingRegions + 
 	    #process.initialStepHitDoublets + 
 	    #process.initialStepHitQuadruplets + 
-	    process.hltPhase2InitialStepSeeds + 
+	    process.initialStepSeeds + 
 	    process.initialStepTrackCandidates + 
 	    process.initialStepTracks +
 	    #hltPhase2InitialStepPVSequence + # use pixelVertices
@@ -447,12 +446,12 @@ def customize_TRK_v6_1(process):
 	    #caloLocalReco +
 	    process.trackerClusterCheck + 
 	    process.pixelTracksSequence + # pixeltracks
-	    process.hltPhase2PixelVerticesSequence + # pixelvertices
+	    process.pixelVerticesSequence + # pixelvertices
 	##############################################
 	    process.hltPhase2InitialStepSequence +
 	    process.hltPhase2HighPtTripletStepSequence +
 	##############################################
-	    process.hltPhase2GeneralTracks 
+	    process.generalTracks 
 	)
 
 	process.MC_Vertexing_v6 = cms.Path(
