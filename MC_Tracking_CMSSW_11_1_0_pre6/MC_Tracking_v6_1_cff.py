@@ -1,5 +1,5 @@
 import FWCore.ParameterSet.Config as cms
-############################################  reconstruction_step version v6 ( using pixeltracks/vertices for track selection + PROTOTRACKS for initialstep seeding )
+
 """
 ################################# list of actually needed modules that are in a cms.Path (here for bookkeeping)
 from Configuration.StandardSequences.Reconstruction_cff import TrackProducer 
@@ -1136,14 +1136,14 @@ hltPhase2InitialStepSeedLayers = cms.EDProducer("SeedingLayersEDProducer",
 #hltIter0PFLowPixelSeedsFromPixelTracks 
 hltPhase2InitialStepSeeds = cms.EDProducer( "SeedGeneratorFromProtoTracksEDProducer",
     useEventsWithNoVertex = cms.bool( True ),
-    originHalfLength = cms.double(10), #10 1  previous 0.3 ),
+    originHalfLength = cms.double(0.3), #10 1  previous 0.3 ),
     useProtoTrackKinematics = cms.bool( False ),
     usePV = cms.bool( False ),  
     SeedCreatorPSet = cms.PSet(  refToPSet_ = cms.string( "hltPhase2SeedFromProtoTracks" ) ),
-    InputVertexCollection = cms.InputTag( "hltPhase2TrimmedPixelVertices"),
+    InputVertexCollection = cms.InputTag(""),
     TTRHBuilder = cms.string( "WithTrackAngle"), #hltESPTTRHBuilderPixelOnly" ),
     InputCollection = cms.InputTag( "hltPhase2PixelTracks" ),
-    originRadius = cms.double( 5 ) # 5 #0.5  previous 0.1
+    originRadius = cms.double( 0.1 ) # 5 #0.5  previous 0.1
 )
 
 """
@@ -1562,7 +1562,7 @@ MC_Tracking_v6 = cms.Path(
     hltPhase2GeneralTracks 
 )
 
-MC_Vertexing_v6 = cms.Path(
+MC_Vertexing = cms.Path(
     caloLocalReco +
     vertexReco
 )
