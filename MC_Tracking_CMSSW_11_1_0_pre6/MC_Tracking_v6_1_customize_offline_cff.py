@@ -257,16 +257,16 @@ def customize_TRK_v6_1(process):
 	########################  initial step
 
 	#hltIter0PFLowPixelSeedsFromPixelTracks 
-	process.initialStepSeeds = cms.EDProducer( "SeedGeneratorFromProtoTracksEDProducer",
+	hltPhase2InitialStepSeeds = cms.EDProducer( "SeedGeneratorFromProtoTracksEDProducer",
 	    useEventsWithNoVertex = cms.bool( True ),
-	    originHalfLength = cms.double(10), #10 1  previous 0.3 ),
+	    originHalfLength = cms.double(0.3),
 	    useProtoTrackKinematics = cms.bool( False ),
 	    usePV = cms.bool( False ),  
 	    SeedCreatorPSet = cms.PSet(  refToPSet_ = cms.string( "hltPhase2SeedFromProtoTracks" ) ),
-	    InputVertexCollection = cms.InputTag( "trimmedPixelVertices"),
+	    InputVertexCollection = cms.InputTag(""),
 	    TTRHBuilder = cms.string( "WithTrackAngle"), #hltESPTTRHBuilderPixelOnly" ),
-	    InputCollection = cms.InputTag( "pixelTracks" ),
-	    originRadius = cms.double( 5 ) # 5 #0.5  previous 0.1
+	    InputCollection = cms.InputTag( "hltPhase2PixelTracks" ),
+	    originRadius = cms.double( 0.1 ) 
 	)
 
 	#online
